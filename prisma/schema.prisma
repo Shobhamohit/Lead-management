@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  EMPLOYEE
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  FOLLOW_UP
+  CONVERTED
+  REJECTED
+}
+
+enum LeadSource {
+  WEBSITE
+  FACEBOOK
+  INSTAGRAM
+  GOOGLE
+  MANUAL
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(EMPLOYEE)
+  fcmToken  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdLeads  Lead[] @relation("LeadCreator")
+  assignedLeads Lead[] @relation("LeadAssignee")
+}
+
+model Lead {
+  id         String     @id @default(cuid())
+  name       String
+  phone      String
+  email      String?
+  campaign   String?
+  source     LeadSource
+  status     LeadStatus @default(NEW)
+  remarks    String?
+  assignedTo String?
+  createdBy  String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  creator  User  @relation("LeadCreator", fields: [createdBy], references: [id])
+  assignee User? @relation("LeadAssignee", fields: [assignedTo], references: [id])
+
+  @@index([phone])
+  @@index([status])
+  @@index([assignedTo])
+  @@index([createdBy])
+  @@index([createdAt])
+}

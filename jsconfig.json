@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "checkJs": true,
+    "allowJs": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "maxNodeModuleJsDepth": 0,
+    "strict": false,
+    "noImplicitAny": false,
+    "types": ["node"]
+  },
+  "include": ["src/**/*.js", "prisma/**/*.js", "*.js"],
+  "exclude": ["node_modules", "prisma/migrations"]
+}
